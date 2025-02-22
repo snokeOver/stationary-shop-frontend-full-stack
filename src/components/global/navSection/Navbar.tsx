@@ -36,7 +36,7 @@ const Navbar = () => {
 
           <div className="flex items-center justify-center gap-2">
             <div className="flex items-center gap-4">
-              <CartSheet />
+              {user && <CartSheet />}
 
               <ThemeSwitch />
             </div>

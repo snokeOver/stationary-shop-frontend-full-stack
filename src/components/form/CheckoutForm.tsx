@@ -2,13 +2,6 @@ import React, { useEffect, useState, FormEvent } from "react";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 import { useNavigate } from "react-router-dom";
-
-import "./CheckFormStayles.css";
-import {
-  useAppDispatch,
-  useAuthSelector,
-  useCartSelector,
-} from "@/hooks/useApp";
 import { toast } from "sonner";
 import { clearCart } from "@/redux/features/cart/cartSlice";
 import PrimaryActionButton from "../shared/buttons/PrimaryActionButton";
@@ -16,14 +9,29 @@ import {
   useCreateInentMutation,
   useCreateOrderMutation,
 } from "@/redux/features/order/orderApi";
+import { ICartProduct } from "@/types";
+import { useAppDispatch } from "@/hooks/useApp";
 
-const CheckoutForm: React.FC = () => {
+interface CheckoutFormProps {
+  userInfo: {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+  };
+  items: ICartProduct[];
+  totalPrice: number;
+}
+
+const CheckoutForm: React.FC<CheckoutFormProps> = ({
+  userInfo,
+  items,
+  totalPrice,
+}) => {
   const stripe = useStripe();
   const elements = useElements();
   const navigate = useNavigate();
-
-  const { user } = useAuthSelector();
-  const { items, totalPrice } = useCartSelector();
+  const dispatch = useAppDispatch();
 
   const [createIntent, { isLoading: isIntentLoading }] =
     useCreateInentMutation();
@@ -33,138 +41,164 @@ const CheckoutForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const dispatch = useAppDispatch();
 
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
 
     if (!stripe || !elements) {
+      setErrorMessage("Stripe has not been initialized.");
       setLoading(false);
       return;
     }
 
     const card = elements.getElement(CardElement);
-    if (card === null) {
+    if (!card) {
+      setErrorMessage("Card details are incomplete.");
       setLoading(false);
       return;
     }
 
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: card as StripeCardElement,
-    });
-
-    if (error) {
-      setErrorMessage(error.message || "An error occurred");
-      console.error(error);
-      setLoading(false);
-      return;
-    } else {
-      console.log("Payment Method:", paymentMethod);
-      setErrorMessage("");
-    }
-    if (!user) return;
-    // Confirm Payment
-    const { paymentIntent, error: confirmError } =
-      await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
+    try {
+      // Create payment method
+      const { error: paymentMethodError, paymentMethod } =
+        await stripe.createPaymentMethod({
+          type: "card",
           card: card as StripeCardElement,
-          billing_details: {
-            email: user.email,
-            name: user.name,
-          },
-        },
-      });
+        });
 
-    if (confirmError) {
-      console.error("Confirm Error:", confirmError);
-      setLoading(false);
-    } else {
+      if (paymentMethodError) {
+        setErrorMessage(
+          paymentMethodError.message ||
+            "An error occurred while processing your payment."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Confirm payment
+      const { paymentIntent, error: confirmError } =
+        await stripe.confirmCardPayment(clientSecret, {
+          payment_method: {
+            card: card as StripeCardElement,
+            billing_details: {
+              email: userInfo.email,
+              name: userInfo.name,
+            },
+          },
+        });
+
+      if (confirmError) {
+        setErrorMessage(
+          confirmError.message ||
+            "An error occurred while confirming your payment."
+        );
+        setLoading(false);
+        return;
+      }
+
       if (paymentIntent && paymentIntent.status === "succeeded") {
         // Payment succeeded; save payment details on the server
-        handleCreatePaymentDetils(paymentIntent.id);
+        await handleCreatePaymentDetails(paymentIntent.id);
+        toast.success(`Payment of $${totalPrice} was successful!`);
+        dispatch(clearCart());
+        navigate("/dashboard/user");
       } else {
-        setLoading(false);
+        setErrorMessage("Payment failed. Please try again.");
       }
+    } catch (error) {
+      setErrorMessage("An unexpected error occurred. Please try again.");
+      console.error("Payment error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Create payment intent when currAmount > 0 and userDetails exist
+  // Create payment intent when totalPrice > 0
   useEffect(() => {
     const createAPaymentIntent = async () => {
-      const postData = { amount: totalPrice };
       try {
-        const res = await createIntent(postData).unwrap();
-
+        const res = await createIntent({ amount: totalPrice }).unwrap();
         setClientSecret(res.data.clientSecret);
-      } catch (err) {
-        console.error("Error creating payment intent:", err);
+      } catch (error) {
+        setErrorMessage("Failed to create payment intent. Please try again.");
+        console.error("Error creating payment intent:", error);
       }
     };
 
-    if (user && totalPrice > 0) {
-      createAPaymentIntent();
-    }
-  }, [createIntent, totalPrice, user]);
+    createAPaymentIntent();
+  }, [createIntent, totalPrice]);
 
-  // Create payment details on successful payment
-  const handleCreatePaymentDetils = async (txId: string) => {
-    if (!user) return null;
-    const postData = {
-      email: user.email,
+  // Save payment details on the server
+  const handleCreatePaymentDetails = async (txId: string) => {
+    const orderData = {
+      userInfo, // Use the userInfo passed as props
       paidAmount: totalPrice,
       txId: txId,
       orderItems: items,
+      status: "Pending",
     };
+
+    console.log("Order data:", orderData);
+
     try {
-      const res = await createOrder(postData).unwrap();
-
+      const res = await createOrder(orderData).unwrap();
+      // console.log("Order create res:", res);
+      if (!res.success) return;
       if (res.data) {
-        toast(`suc $${totalPrice} Payment Successful.`);
-        dispatch(clearCart());
-
-        setLoading(false);
-        navigate("/dashboard/user");
+        toast.success("Order created successfully!");
       }
-    } catch (err) {
-      console.error("Error creating payment details:", err);
-      setLoading(false);
+    } catch (error) {
+      setErrorMessage("Failed to create order. Please try again.");
+      console.error("Error creating order:", error);
     }
   };
 
   return (
-    <div>
-      <div>
-        <p className="text-red-400 text-center mb-10">{errorMessage}</p>
+    <div className="max-w-md mx-auto p-6 bg-gray-800 rounded-lg shadow-md">
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold text-yellow-300">Pay with Stripe</h2>
+        <p className="text-gray-200">
+          Complete your payment securely with Stripe.
+        </p>
       </div>
+
+      {errorMessage && (
+        <div className="text-red-500 text-center mb-4">{errorMessage}</div>
+      )}
+
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="mb-6">
           <CardElement
             options={{
               style: {
                 base: {
                   fontSize: "16px",
-                  color: "#424770",
+                  color: "#fbbf24", // Yellow-500 text color
                   "::placeholder": {
-                    color: "#aab7c4",
+                    color: "#9ca3af", // Gray-400 placeholder color
                   },
+                  iconColor: "#fbbf24", // Yellow-500 icon color
                 },
                 invalid: {
-                  color: "#9e2146",
+                  color: "#ef4444", // Red-500 for invalid input
                 },
+              },
+              classes: {
+                base: "bg-gray-700 p-3 rounded-lg border border-gray-600", // Custom container styling
+                focus: "border-yellow-500 ring-2 ring-yellow-500", // Focus state
               },
             }}
           />
         </div>
-        <div className="mt-5">
-          <PrimaryActionButton
-            btnText={`Pay $${totalPrice} Now`}
-            loadingText="Processing..."
-            isLoading={loading}
-            isDisable={!stripe || !clientSecret}
-          />
-        </div>
+
+        <PrimaryActionButton
+          btnText={`Pay $${totalPrice} Now`}
+          loadingText="Processing..."
+          isLoading={loading}
+          isDisable={!stripe || loading}
+        />
       </form>
     </div>
   );

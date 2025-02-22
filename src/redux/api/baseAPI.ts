@@ -10,8 +10,10 @@ import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
+const base_url = import.meta.env.VITE_BASE_URL;
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:3500/api",
+  baseUrl: base_url,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
@@ -37,7 +39,7 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     //* Send Refresh
     console.log("Sending refresh token");
 
-    const res = await fetch("http://localhost:3500/api/auth/refresh-token", {
+    const res = await fetch(`${base_url}/auth/refresh-token`, {
       method: "POST",
       credentials: "include",
     });
