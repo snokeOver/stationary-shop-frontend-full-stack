@@ -9,6 +9,7 @@ interface IPrimaryActionButtonProps {
   className?: string;
   Icon?: React.ElementType;
   type?: "submit" | "button";
+  isDisable?: boolean;
 }
 
 const PrimaryActionButton = ({
@@ -19,13 +20,14 @@ const PrimaryActionButton = ({
   className = "",
   Icon,
   type = "submit",
+  isDisable = false,
 }: IPrimaryActionButtonProps) => {
   return (
     <Button
       type={type}
       onClick={onClick}
       className={`w-full uppercase text-black ${className}`}
-      disabled={isLoading}
+      disabled={isLoading || isDisable}
     >
       {isLoading ? (
         <div className="flex items-center gap-2">

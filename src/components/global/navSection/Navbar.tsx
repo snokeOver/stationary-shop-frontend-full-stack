@@ -25,14 +25,14 @@ const Navbar = () => {
             />
           </Link>
 
-          <div className="hidden h-full w-[1px] min-w-[1px] rounded-sm bg-white xl:flex"></div>
-          <div className="hidden xl:flex">
+          <div className="hidden h-full w-[1px] min-w-[1px] rounded-sm bg-white md:flex"></div>
+          <div className="hidden md:flex">
             <NavLinks />
           </div>
         </div>
 
         <div className="flex h-full items-center justify-start gap-5">
-          <div className="hidden h-full w-[1px] min-w-[1px] rounded-sm bg-white text-xs xl:flex"></div>
+          <div className="hidden h-full w-[1px] min-w-[1px] rounded-sm bg-white text-xs md:flex"></div>
 
           <div className="flex items-center justify-center gap-2">
             <div className="flex items-center gap-4">
@@ -46,14 +46,14 @@ const Navbar = () => {
           </div>
 
           {/* Authentication & User Menu */}
-          <div className="hidden xl:flex">
+          <div className="hidden md:flex">
             {!user ? (
               <Link to="/login">
                 <Button>Sign in</Button>
               </Link>
             ) : (
               <ProfileDropdownMenu>
-                <Button className="flex items-center gap-3 rounded-sm  text-xs font-semibold uppercase   xl:px-5">
+                <Button className="flex items-center gap-3 rounded-sm  text-xs font-semibold uppercase   md:px-5">
                   <CircleUserRound className="size-32" />
                   {user.name}
                 </Button>
@@ -62,7 +62,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu */}
-          <div className="z-[100] flex xl:hidden">
+          <div className="z-[100] flex md:hidden">
             <NavRightSheet />
           </div>
         </div>

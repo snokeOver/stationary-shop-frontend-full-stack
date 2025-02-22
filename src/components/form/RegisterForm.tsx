@@ -17,19 +17,12 @@ import {
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import PrimaryActionButton from "../shared/buttons/PrimaryActionButton";
-
-import { useAppDispatch } from "@/hooks/useApp";
-
-import { setUser } from "@/redux/features/auth/authSlice";
-import { verifyToken } from "@/utils/verifyToken";
-import { IUser } from "@/types";
 import { registerUserSchema } from "@/schemas";
 import { useRegisterUserMutation } from "@/redux/features/auth/authApi";
 
 export function RegisterForm() {
   const navigate = useNavigate();
   const [registerUser] = useRegisterUserMutation();
-  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);

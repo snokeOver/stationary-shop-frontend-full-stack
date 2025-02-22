@@ -1,11 +1,16 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Trash2 } from "lucide-react";
 import { useCartSelector, useAppDispatch } from "@/hooks/useApp";
-import { updateQuantity } from "@/redux/features/cart/cartSlice";
+import {
+  updateQuantity,
+  clearCart,
+  removeFromCart,
+} from "@/redux/features/cart/cartSlice";
 import { toast } from "sonner";
 import { ICartProduct } from "@/types";
+import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
 
 export function CartSheet() {
   const { items } = useCartSelector();
@@ -37,6 +42,16 @@ export function CartSheet() {
     }
   };
 
+  const handleDeleteItem = (itemId: string) => {
+    dispatch(removeFromCart(itemId));
+    toast.success("Item removed from cart");
+  };
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+    toast.success("Cart cleared");
+  };
+
   const totalPrice = items.reduce(
     (total, item) => total + item.price * item.purchaseQuantity,
     0
@@ -61,18 +76,24 @@ export function CartSheet() {
         </div>
       </SheetTrigger>
       <SheetContent className="flex flex-col py-6 px-2">
-        <h2 className="text-xl font-bold mb-4 text-center text-yellow-300 uppercase">
-          Your Cart
-        </h2>
+        <DialogTitle>Your Cart</DialogTitle>
+        <DialogDescription />
+
         <div className="flex-1 overflow-y-auto">
           {items.length === 0 ? (
-            <p className="text-center text-gray-500">Your cart is empty.</p>
+            <div className="flex flex-col items-center justify-center h-full gap-4">
+              <ShoppingCart className="w-12 h-12 text-gray-400" />
+              <p className="text-lg text-gray-500">Your cart is empty.</p>
+              <p className="text-sm text-gray-400">
+                Add some items to get started!
+              </p>
+            </div>
           ) : (
             <div className="space-y-4">
               {items.map((item) => (
                 <div
                   key={item._id}
-                  className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800"
+                  className="flex items-center gap-4 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 relative"
                 >
                   {/* Product Image */}
                   <img
@@ -92,40 +113,54 @@ export function CartSheet() {
                     </p>
                   </div>
 
-                  {/* Quantity Controls */}
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDecrease(item)}
-                      disabled={item.purchaseQuantity <= 1}
-                      className="w-8 h-8 p-0"
-                    >
-                      –
-                    </Button>
-                    <span className="text-sm">{item.purchaseQuantity}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleIncrease(item)}
-                      disabled={item.purchaseQuantity >= item.availableQuantity}
-                      className="w-8 h-8 p-0"
-                    >
-                      +
-                    </Button>
+                  <div className="flex flex-col-reverse sm:flex-row gap-3 justify-between items-center">
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDecrease(item)}
+                        disabled={item.purchaseQuantity <= 1}
+                        className="w-8 h-8 p-0"
+                      >
+                        –
+                      </Button>
+                      <span className="text-sm">{item.purchaseQuantity}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleIncrease(item)}
+                        disabled={
+                          item.purchaseQuantity >= item.availableQuantity
+                        }
+                        className="w-8 h-8 p-0"
+                      >
+                        +
+                      </Button>
+                    </div>
+
+                    {/* Subtotal */}
+                    <div className="text-sm font-bold">
+                      ${(item.price * item.purchaseQuantity).toFixed(2)}
+                    </div>
                   </div>
 
-                  {/* Subtotal */}
-                  <div className="text-sm font-bold">
-                    ${(item.price * item.purchaseQuantity).toFixed(2)}
-                  </div>
+                  {/* Delete Button */}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteItem(item._id)}
+                    className="text-white hover:text-red-600 absolute top-0 right-0"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Total Price and Checkout Button */}
+        {/* Total Price, Clear Cart, and Checkout Buttons */}
         {items.length > 0 && (
           <div className="border-t pt-4">
             <div className="flex justify-between items-center mb-4">
@@ -134,9 +169,18 @@ export function CartSheet() {
                 ${totalPrice.toFixed(2)}
               </span>
             </div>
-            <Button className="w-full" asChild>
-              <Link to="/checkout">Proceed to Checkout</Link>
-            </Button>
+            <div className="flex flex-col gap-2">
+              <Button
+                variant="outline"
+                onClick={handleClearCart}
+                className="w-full text-red-500 hover:bg-red-50 hover:text-red-600"
+              >
+                Clear Cart
+              </Button>
+              <Button className="w-full" asChild>
+                <Link to="/checkout">Proceed to Checkout</Link>
+              </Button>
+            </div>
           </div>
         )}
       </SheetContent>

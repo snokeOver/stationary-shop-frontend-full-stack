@@ -1,3 +1,3 @@
 export * from "./authUser";
 export * from "./global";
-export * from "./product.tpes";
+export * from "./product.types";

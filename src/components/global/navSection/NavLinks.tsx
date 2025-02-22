@@ -9,7 +9,7 @@ const NavLinks = () => {
   const { pathname } = useLocation();
 
   return (
-    <div className="flex flex-col gap-5 lg:flex-row lg:gap-0">
+    <div className="flex flex-col gap-5 md:flex-row md:gap-0">
       {navLinks.map((item) => {
         // Hide certain links based on authentication and role
         if (
@@ -28,7 +28,7 @@ const NavLinks = () => {
             to={item.url}
             target={item.new_tab ? "_blank" : "_self"}
             className={cn(
-              "m-2 flex text-xs font-semibold uppercase text-white hover:underline lg:ml-5",
+              "m-2 flex text-xs font-semibold uppercase text-white hover:underline md:ml-5",
               {
                 "text-theme-400": pathname === item.url,
               }
