@@ -1,5 +1,6 @@
 import PublicRoute from "@/layout/PublicRoute";
 import RootLayout from "@/layout/RootLayout";
+import AllProduct from "@/pages/AllProduct";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import ProductDetails from "@/pages/ProductDetails";
@@ -16,10 +17,13 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
-
       {
         path: "/details",
         element: <ProductDetails />,
+      },
+      {
+        path: "/all-products",
+        element: <AllProduct />,
       },
       {
         path: "/login",
