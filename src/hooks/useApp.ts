@@ -9,3 +9,4 @@ const createSliceSelector = <T>(selector: (state: RootState) => T) => {
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 
 export const useAuthSelector = createSliceSelector((state) => state.auth);
+export const useCartSelector = createSliceSelector((state) => state.cart);

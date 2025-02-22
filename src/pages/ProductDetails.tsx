@@ -1,9 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useGetProductByIdQuery } from "@/redux/features/product/productApi";
 import LoadingSection from "@/components/global/LoadingSection";
-import { Button } from "@/components/ui/button"; // Import shadcn Button
+
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"; // Import shadcn Card components
 import { ArrowLeft, ShoppingCart } from "lucide-react";
+
+import useAddToCart from "@/hooks/useAddToCart";
+import PrimaryActionButton from "@/components/shared/buttons/PrimaryActionButton";
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -11,6 +14,7 @@ const ProductDetails = () => {
   const slug = queryParams.get("slug");
   const navigate = useNavigate();
   const { data, error, isLoading } = useGetProductByIdQuery(slug);
+  const { addProdctToCart, isLoading: isPending } = useAddToCart();
 
   if (isLoading) return <LoadingSection />;
   if (error) return <div>Error loading product details</div>;
@@ -92,10 +96,13 @@ const ProductDetails = () => {
 
             {/* Action Buttons */}
             <CardFooter className="flex gap-2">
-              <Button className="flex-1">
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Add to Cart
-              </Button>
+              <PrimaryActionButton
+                btnText="Add To Cart"
+                loadingText="Adding..."
+                isLoading={isPending}
+                onClick={() => addProdctToCart(_id)}
+                Icon={ShoppingCart}
+              />
             </CardFooter>
           </div>
         </CardContent>

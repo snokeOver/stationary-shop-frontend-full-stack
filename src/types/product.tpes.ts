@@ -17,3 +17,12 @@ export interface IProductResponse {
   status: boolean;
   data: IProduct[];
 }
+
+export interface ICartProduct {
+  _id: string;
+  name: string;
+  price: number;
+  purchaseQuantity: number;
+  availableQuantity: number;
+  imageUrl: string;
+}

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { IProduct } from "@/types";
 import { useNavigate } from "react-router-dom";
+import useAddToCart from "@/hooks/useAddToCart";
 
 type ProductCardProps = {
   product: IProduct;
@@ -18,6 +19,7 @@ type ProductCardProps = {
 
 export function ProductCard({ product, className }: ProductCardProps) {
   const navigate = useNavigate();
+  const { addProdctToCart } = useAddToCart();
   return (
     <Card className={cn("w-full  overflow-hidden", className)}>
       <CardHeader className="p-0">
@@ -36,7 +38,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
         </CardTitle>
       </CardContent>
       <CardFooter className="flex gap-2">
-        <Button variant="outline" className="flex-1">
+        <Button
+          onClick={() => addProdctToCart(product._id)}
+          variant="outline"
+          className="flex-1"
+        >
           <ShoppingCart className="mr-2 h-4 w-4" />
           Add to Cart
         </Button>

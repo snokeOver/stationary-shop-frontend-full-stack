@@ -24,7 +24,7 @@ const PrimaryActionButton = ({
     <Button
       type={type}
       onClick={onClick}
-      className={`w-full uppercase text-white ${className}`}
+      className={`w-full uppercase text-black ${className}`}
       disabled={isLoading}
     >
       {isLoading ? (
