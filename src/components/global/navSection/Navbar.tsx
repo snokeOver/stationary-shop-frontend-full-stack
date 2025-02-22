@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ThemeToggler } from "../ThemeToggler";
+
 import NavLinks from "./NavLinks";
 
 import { CircleUserRound } from "lucide-react";
@@ -8,6 +8,7 @@ import { ProfileDropdownMenu } from "./ProfileDropMenu";
 import { NavRightSheet } from "./NavRightSheet";
 import { useAuthSelector } from "@/hooks/useApp";
 import { ThemeSwitch } from "./ThemeSwitch";
+import { CartSheet } from "./CartSheet";
 
 const Navbar = () => {
   const { user } = useAuthSelector();
@@ -34,7 +35,9 @@ const Navbar = () => {
           <div className="hidden h-full w-[1px] min-w-[1px] rounded-sm bg-white text-xs xl:flex"></div>
 
           <div className="flex items-center justify-center gap-2">
-            <div>
+            <div className="flex items-center gap-4">
+              <CartSheet />
+
               <ThemeSwitch />
             </div>
             {/* Search part */}

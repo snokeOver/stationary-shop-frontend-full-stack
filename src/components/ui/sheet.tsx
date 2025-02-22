@@ -44,7 +44,7 @@ const sheetVariants = cva(
       },
     },
     defaultVariants: {
-      side: "left",
+      side: "right",
     },
   }
 );
@@ -60,7 +60,7 @@ const SheetContent = React.forwardRef<
   SheetContentProps
 >(
   (
-    { side = "left", className, children, noCloseButton = false, ...props },
+    { side = "right", className, children, noCloseButton = false, ...props },
     ref
   ) => (
     <SheetPortal>
