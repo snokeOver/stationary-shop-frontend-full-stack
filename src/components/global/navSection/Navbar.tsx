@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileDropdownMenu } from "./ProfileDropMenu";
 import { NavRightSheet } from "./NavRightSheet";
 import { useAuthSelector } from "@/hooks/useApp";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const Navbar = () => {
   const { user } = useAuthSelector();
@@ -34,7 +35,7 @@ const Navbar = () => {
 
           <div className="flex items-center justify-center gap-2">
             <div>
-              <ThemeToggler />
+              <ThemeSwitch />
             </div>
             {/* Search part */}
 

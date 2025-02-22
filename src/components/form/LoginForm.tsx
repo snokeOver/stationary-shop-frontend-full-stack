@@ -45,7 +45,7 @@ export function LogInForm() {
 
   const onSubmit = async (data: FieldValues) => {
     setIsLoading(true);
-    console.log(data);
+    // console.log(data);
 
     try {
       const userInfo = {
