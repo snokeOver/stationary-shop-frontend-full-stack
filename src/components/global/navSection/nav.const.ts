@@ -9,11 +9,7 @@ export const navLinks = [
     url: "/dashboard",
     new_tab: false,
   },
-  {
-    name: "Details",
-    url: "/details",
-    new_tab: false,
-  },
+
   {
     name: "About",
     url: "/about",

@@ -53,6 +53,7 @@ export function RegisterForm() {
         password: data.password,
       };
       const res = await registerUser(userInfo).unwrap();
+      console.log("Response register:", res);
 
       if (!res.success) {
         form.setError("password", {
@@ -62,20 +63,10 @@ export function RegisterForm() {
         return;
       }
 
-      const user = verifyToken(res.data.accessToken) as IUser;
-      if (!user) {
-        return form.setError("password", {
-          type: "manual",
-          message: "Something went wrong",
-        });
-      }
-
-      dispatch(setUser({ user, token: res.data.accessToken }));
-
       toast("Registration successful!", {
-        description: `Welcome, ${user.name}! Explore our website.`,
+        description: `Welcome, ${res.data.name}! Please login with your credentials.`,
       });
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     } finally {

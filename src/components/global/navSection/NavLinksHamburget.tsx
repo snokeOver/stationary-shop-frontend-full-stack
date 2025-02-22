@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { navLinks } from "./nav.const";
+import { useAuthSelector } from "@/hooks/useApp";
 
 const NavLinksHamburger = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<{ role: string } | null>(null);
   const location = useLocation();
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
-      setIsLoggedIn(true);
-    }
-  }, []);
+  const { user } = useAuthSelector();
 
   return (
     <div className="flex flex-col gap-4 xl:flex-row xl:gap-0">
       {navLinks.map((item) => {
         // Restrict pages for logged-out users
-        if (!isLoggedIn && ["/dashboard", "/profile"].includes(item.url)) {
+        if (!user && ["/dashboard", "/profile"].includes(item.url)) {
+          return null;
+        }
+        if (["/login", "/register"].includes(item.url)) {
           return null;
         }
 

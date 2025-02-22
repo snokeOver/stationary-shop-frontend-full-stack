@@ -68,7 +68,6 @@ export function LogInForm() {
           type: "manual",
           message: res.message || "Something went wrong",
         });
-        return;
       }
 
       dispatch(setUser({ user: user, token: res.data.accessToken }));

@@ -1,3 +1,4 @@
+import PublicRoute from "@/layout/PublicRoute";
 import RootLayout from "@/layout/RootLayout";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
@@ -17,11 +18,19 @@ const router = createBrowserRouter([
 
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        ),
       },
       {
         path: "/register",
-        element: <Register />,
+        element: (
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        ),
       },
     ],
   },

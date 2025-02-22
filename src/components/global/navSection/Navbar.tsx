@@ -18,8 +18,8 @@ const Navbar = () => {
           <Link to="/" className="">
             <img
               src="./logo.png"
-              alt="Task Master Logo"
-              className="h-12 w-12" // Adjust height and width as needed
+              alt="Snoke Stationary Logo"
+              className="h-12 w-12"
             />
           </Link>
 
