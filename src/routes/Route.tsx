@@ -1,7 +1,8 @@
 import RootLayout from "@/layout/RootLayout";
 import Home from "@/pages/Home";
-import Task from "@/pages/Task";
-import UserPage from "@/pages/UserPage";
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -13,13 +14,14 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />,
       },
+
       {
-        path: "/task",
-        element: <Task />,
+        path: "/login",
+        element: <Login />,
       },
       {
-        path: "/user",
-        element: <UserPage />,
+        path: "/register",
+        element: <Register />,
       },
     ],
   },
