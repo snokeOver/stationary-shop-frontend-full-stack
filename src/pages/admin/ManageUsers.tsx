@@ -16,9 +16,11 @@ import {
   useUserActivationToggleMutation,
 } from "@/redux/features/auth/authApi";
 import { IManageUser } from "@/types";
+import { useAuthSelector } from "@/hooks/useApp";
 
 export default function ManageUsers() {
   const { data, error, isLoading } = useGetAllUsersQuery(undefined);
+  const { user } = useAuthSelector();
   const [toggleUserActivation] = useUserActivationToggleMutation();
   if (isLoading) return <LoadingSection />;
   if (error) return <div>Error occurred in getting users</div>;
@@ -33,10 +35,10 @@ export default function ManageUsers() {
       console.error("Failed to deactivate user:", error);
     }
   };
-
+  if (!user) return;
   return (
     <div className="w-[300px] sm:w-full mx-auto md:p-4">
-      <Table className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+      <Table>
         <TableCaption className="text-gray-600 dark:text-gray-400"></TableCaption>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
@@ -48,46 +50,46 @@ export default function ManageUsers() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data?.data?.map((user: IManageUser, index: number) => (
+          {data?.data?.map((curUser: IManageUser, index: number) => (
             <TableRow
               key={index}
               className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <TableCell className="font-medium text-gray-900 dark:text-gray-100">
-                {user.name.toUpperCase()}
+                {curUser.name.toUpperCase()}
               </TableCell>
               <TableCell className="text-gray-900 dark:text-gray-100">
-                {user.email}
+                {curUser.email}
               </TableCell>
               <TableCell>
                 <Badge
-                  variant={user.role === "Admin" ? "default" : "outline"}
+                  variant={curUser.role === "Admin" ? "default" : "outline"}
                   className="whitespace-nowrap"
                 >
-                  {user.role}
+                  {curUser.role}
                 </Badge>
               </TableCell>
               <TableCell>
                 <Badge
                   variant={
-                    user.status === "Active" ? "secondary" : "destructive"
+                    curUser.status === "Active" ? "secondary" : "destructive"
                   }
                   className="whitespace-nowrap"
                 >
-                  {user.status}
+                  {curUser.status}
                 </Badge>
               </TableCell>
               <TableCell className="text-right space-x-2">
                 <Button
                   size="sm"
-                  onClick={() => handleDeactivateUser(user.email)}
+                  onClick={() => handleDeactivateUser(curUser.email)}
                   className={`${
-                    user.status === "Active"
+                    curUser.status === "Active"
                       ? "bg-red-500 hover:bg-red-600"
                       : "bg-green-500 hover:bg-green-600"
-                  } text-white`}
+                  } text-white ${user.email === curUser.email ? "hidden" : ""}`}
                 >
-                  {user.status === "Active" ? "Deactivate" : "Activate"}
+                  {curUser.status === "Active" ? "Deactivate" : "Activate"}
                 </Button>
               </TableCell>
             </TableRow>

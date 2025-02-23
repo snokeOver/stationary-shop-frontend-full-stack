@@ -33,7 +33,7 @@ export default function ViewOrders() {
 
   return (
     <div className="w-[300px] sm:w-full mx-auto">
-      <Table className="bg-gray-200 dark:bg-gray-800">
+      <Table>
         <TableCaption>A list of your recent orders.</TableCaption>
         <TableHeader>
           <TableRow>

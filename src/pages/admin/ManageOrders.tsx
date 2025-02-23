@@ -46,33 +46,20 @@ export default function ManageOrders() {
 
   return (
     <div className="w-[300px] sm:w-full mx-auto md:p-4">
-      <Table className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md">
+      <Table>
         <TableCaption className="text-gray-600 dark:text-gray-400"></TableCaption>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">
-              Transaction ID
-            </TableHead>
-            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">
-              Order Summary
-            </TableHead>
-            <TableHead className="font-semibold text-gray-700 dark:text-gray-300">
-              Status
-            </TableHead>
-            <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-right">
-              Paid Amount
-            </TableHead>
-            <TableHead className="font-semibold text-gray-700 dark:text-gray-300 text-right">
-              Action
-            </TableHead>
+            <TableHead>Transaction ID</TableHead>
+            <TableHead>Order Summary</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead className=" text-right">Paid Amount</TableHead>
+            <TableHead className=" text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {data?.data?.map((order: IOrder) => (
-            <TableRow
-              key={order._id}
-              className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-            >
+            <TableRow key={order._id}>
               <TableCell className="font-medium text-gray-900 dark:text-gray-100">
                 {`${order.txId.slice(0, 5)}***${order.txId.slice(-3)}`}
               </TableCell>
@@ -82,8 +69,8 @@ export default function ManageOrders() {
                     <div key={index} className="text-sm">
                       <span className="font-medium text-gray-900 dark:text-gray-100">
                         {item.name}
-                      </span>{" "}
-                      -{" "}
+                      </span>
+                      -
                       <span className="text-gray-500 dark:text-gray-400">
                         {item.purchaseQuantity} x ${item.price}
                       </span>
