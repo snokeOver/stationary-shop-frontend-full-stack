@@ -146,15 +146,15 @@ export function CartSection({
             <span className="text-xl font-bold">${totalPrice.toFixed(2)}</span>
           </div>
           <div className="flex flex-col gap-2">
+            <Button className="w-full" onClick={onCheckout}>
+              Next
+            </Button>
             <Button
               variant="outline"
               onClick={handleClearCart}
               className="w-full text-red-500 hover:bg-red-50 hover:text-red-600"
             >
               Clear Cart
-            </Button>
-            <Button className="w-full" onClick={onCheckout}>
-              Next
             </Button>
           </div>
         </div>

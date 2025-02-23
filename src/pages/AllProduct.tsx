@@ -72,7 +72,7 @@ export default function AllProduct() {
   if (!products) return null;
 
   return (
-    <div className="max-w-7xl mx-auto px-5">
+    <div className="max-w-7xl mx-auto px-5 mb-5 md:mb-10 lg:mb-16">
       {/* Page Title */}
       <div className="text-center my-10">
         <h1 className="text-2xl md:text-4xl font-bold text-yellow-500 mb-2">
