@@ -10,3 +10,4 @@ export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 
 export const useAuthSelector = createSliceSelector((state) => state.auth);
 export const useCartSelector = createSliceSelector((state) => state.cart);
+export const useProductSelector = createSliceSelector((state) => state.product);

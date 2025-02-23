@@ -17,7 +17,7 @@ const PrimaryNavButton = ({
     <Button
       onClick={onClick}
       type={btnType}
-      className={`w-full uppercase text-white ${className}`}
+      className={`w-full uppercase text-black ${className}`}
     >
       {btnText}
     </Button>

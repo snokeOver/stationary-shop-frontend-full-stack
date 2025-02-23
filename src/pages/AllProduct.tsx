@@ -167,7 +167,7 @@ export default function AllProduct() {
           )}
 
           {/* Pagination */}
-          {products.length > 4 && (
+          {totalItems > 4 && (
             <div className="w-full md:mt-10 xl:mt-14">
               <AllProductPagination
                 currentPage={currentPage}

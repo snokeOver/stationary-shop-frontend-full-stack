@@ -24,6 +24,7 @@ const productApi = baseApi.injectEndpoints({
           page: page.toString(),
           limit: limit.toString(),
         });
+        params.append("isDeleted", "false");
 
         // Add optional query parameters if they are defined
         if (searchTerm) params.append("searchTerm", searchTerm);
@@ -40,7 +41,7 @@ const productApi = baseApi.injectEndpoints({
           params: params,
         };
       },
-      providesTags: ["Product"],
+      providesTags: ["Products"],
     }),
 
     getProductById: builder.query({
@@ -51,13 +52,28 @@ const productApi = baseApi.injectEndpoints({
       providesTags: ["Product"],
     }),
 
-    addProduct: builder.mutation({
+    createProduct: builder.mutation({
       query: (data) => ({
         url: "/products",
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["Product"],
+      invalidatesTags: ["Products"],
+    }),
+    updateProduct: builder.mutation({
+      query: (payload) => ({
+        url: `/products/${payload.id}`,
+        method: "PATCH",
+        body: payload.data,
+      }),
+      invalidatesTags: ["Product", "Products"],
+    }),
+    deleteProduct: builder.mutation({
+      query: (productId) => ({
+        url: `/products/${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
     }),
   }),
 });
@@ -65,7 +81,9 @@ const productApi = baseApi.injectEndpoints({
 export const {
   useGetAllProductsQuery,
   useGetProductByIdQuery,
-  useAddProductMutation,
   useLazyGetProductByIdQuery,
   useLazyGetAllProductsQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
+  useDeleteProductMutation,
 } = productApi;

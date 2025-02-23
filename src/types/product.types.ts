@@ -1,10 +1,17 @@
+export type TCategory =
+  | "Writing"
+  | "Office Supplies"
+  | "Art Supplies"
+  | "Educational"
+  | "Technology";
+
 export interface IProduct {
   _id: string;
   name: string;
   brand: string;
   imageUrl: string;
   price: number;
-  category: string;
+  category: TCategory;
   description: string;
   quantity: number;
   inStock: boolean;
