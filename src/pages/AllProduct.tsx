@@ -129,7 +129,7 @@ export default function AllProduct() {
           </Select>
 
           {/* In Stock Filter */}
-          <div className="flex items-center justify-end sm:justify-end lg:col-span-2">
+          <div className="flex items-center justify-start sm:justify-end lg:col-span-2">
             <Checkbox
               id="inStock"
               checked={inStock}
@@ -167,15 +167,17 @@ export default function AllProduct() {
           )}
 
           {/* Pagination */}
-          <div className="w-full md:mt-10 xl:mt-14">
-            <AllProductPagination
-              currentPage={currentPage}
-              limit={limit}
-              setCurrentPage={setCurrentPage}
-              setLimit={setLimit}
-              totalItems={totalItems}
-            />
-          </div>
+          {products.length > 4 && (
+            <div className="w-full md:mt-10 xl:mt-14">
+              <AllProductPagination
+                currentPage={currentPage}
+                limit={limit}
+                setCurrentPage={setCurrentPage}
+                setLimit={setLimit}
+                totalItems={totalItems}
+              />
+            </div>
+          )}
         </>
       )}
     </div>
