@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { Button } from "../ui/button";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-5 md:mt-8 lg:mt-10">
+    <footer className="bg-gray-900 text-white py-12 ">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
@@ -116,12 +117,9 @@ const Footer = () => {
                 placeholder="Your email"
                 className="w-full px-4 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
               />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
+              <Button type="submit" className="px-4 py-2  ">
                 Subscribe
-              </button>
+              </Button>
             </form>
           </div>
         </div>
