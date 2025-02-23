@@ -32,8 +32,11 @@ export function ProfileDropdownMenu({ children }: IChildrenProps) {
         </DropdownMenuLabel>
 
         <DropdownMenuItem className="rounded-br-3xl py-2">
-          <Link to="/profile/update" className="w-full text-sm uppercase">
-            Edit Profile
+          <Link
+            to={`/dashboard/${user.role}`}
+            className="w-full text-sm uppercase"
+          >
+            Dashboard
           </Link>
         </DropdownMenuItem>
 

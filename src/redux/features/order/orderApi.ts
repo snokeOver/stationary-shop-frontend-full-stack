@@ -15,8 +15,36 @@ const orderApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Order", "Orders"],
+    }),
+    approveOrder: builder.mutation({
+      query: (orderId) => ({
+        url: `/orders/${orderId}`,
+        method: "PATCH",
+      }),
+      invalidatesTags: ["Order", "Orders"],
+    }),
+    getAllOrders: builder.query({
+      query: () => ({
+        url: "/orders",
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
+    }),
+    getSingleOrder: builder.query({
+      query: (orderId) => ({
+        url: `/orders/${orderId}`,
+        method: "GET",
+      }),
+      providesTags: ["Order"],
     }),
   }),
 });
 
-export const { useCreateInentMutation, useCreateOrderMutation } = orderApi;
+export const {
+  useCreateInentMutation,
+  useCreateOrderMutation,
+  useGetAllOrdersQuery,
+  useGetSingleOrderQuery,
+  useApproveOrderMutation,
+} = orderApi;

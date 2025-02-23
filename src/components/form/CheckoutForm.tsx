@@ -103,7 +103,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
         await handleCreatePaymentDetails(paymentIntent.id);
         toast.success(`Payment of $${totalPrice} was successful!`);
         dispatch(clearCart());
-        navigate("/dashboard/user");
+        navigate("/dashboard/user/view-orders");
       } else {
         setErrorMessage("Payment failed. Please try again.");
       }

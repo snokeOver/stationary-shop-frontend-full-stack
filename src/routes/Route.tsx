@@ -6,12 +6,15 @@ import About from "@/pages/About";
 import AllProduct from "@/pages/AllProduct";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
-import ManageProfile from "@/pages/ManageProfile";
+import ManageProfile from "@/pages/user/ManageProfile";
 import ProductDetails from "@/pages/ProductDetails";
 import Register from "@/pages/Register";
-import ViewOrders from "@/pages/ViewOrders";
+import ViewOrders from "@/pages/user/ViewOrders";
 
 import { createBrowserRouter } from "react-router-dom";
+import ManageOrders from "@/pages/admin/ManageOrders";
+import ManageUsers from "@/pages/admin/ManageUsers";
+import ManageProducts from "@/pages/admin/ManageProduct";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +72,36 @@ const router = createBrowserRouter([
         element: (
           <PrivateRoute role="User">
             <ViewOrders />,
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
+    path: "/dashboard/admin",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: (
+          <PrivateRoute role="Admin">
+            <ManageOrders />,
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manage-users",
+        element: (
+          <PrivateRoute role="Admin">
+            <ManageUsers />,
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manage-products",
+        element: (
+          <PrivateRoute role="Admin">
+            <ManageProducts />,
           </PrivateRoute>
         ),
       },
