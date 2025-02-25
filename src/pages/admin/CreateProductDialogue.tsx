@@ -78,7 +78,6 @@ export function CreateProductDialogue({
   const [files, setFiles] = useState<File[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isImageUpLoading, setIsImageUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const dispatch = useAppDispatch();
 
   const [createProduct, { isLoading: isCreateLoading }] =
@@ -203,10 +202,13 @@ export function CreateProductDialogue({
       } else {
         // Create product
         const res = await createProduct(payload).unwrap();
-        if (!res.status) toast("Product created failed");
-        if (res.status) toast("Product created successfully");
+
+        if (!res.success) toast("Product created failed");
+        if (res.success) toast("Product created successfully");
         form.reset();
         fetchData();
+        setFiles([]);
+        if (product?.imageUrl) product.imageUrl = "";
       }
       setIsImageUploading(false);
       setIsOpen(false);
@@ -220,7 +222,7 @@ export function CreateProductDialogue({
     setIsOpen(false);
     form.reset();
     setFiles([]);
-    setSelectedFile(null);
+    if (product?.imageUrl) product.imageUrl = "";
   };
 
   return (

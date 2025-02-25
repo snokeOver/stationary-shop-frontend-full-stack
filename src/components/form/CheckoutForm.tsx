@@ -33,10 +33,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [createIntent, { isLoading: isIntentLoading }] =
-    useCreateInentMutation();
-  const [createOrder, { isLoading: orderCreateLoading }] =
-    useCreateOrderMutation();
+  const [createIntent] = useCreateInentMutation();
+  const [createOrder] = useCreateOrderMutation();
 
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [clientSecret, setClientSecret] = useState<string>("");
@@ -62,11 +60,10 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
     try {
       // Create payment method
-      const { error: paymentMethodError, paymentMethod } =
-        await stripe.createPaymentMethod({
-          type: "card",
-          card: card as StripeCardElement,
-        });
+      const { error: paymentMethodError } = await stripe.createPaymentMethod({
+        type: "card",
+        card: card as StripeCardElement,
+      });
 
       if (paymentMethodError) {
         setErrorMessage(

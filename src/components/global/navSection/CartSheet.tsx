@@ -4,7 +4,7 @@ import { ShoppingCart } from "lucide-react";
 import { useCartSelector } from "@/hooks/useApp";
 
 import { DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { toast } from "sonner";
+
 import { CheckoutSection } from "@/components/cart/CheckoutSection";
 import { CartSection } from "@/components/cart/CartSectiont";
 

@@ -14,9 +14,9 @@ import useAddToCart from "@/hooks/useAddToCart";
 import { CreateProductDialogue } from "@/pages/admin/CreateProductDialogue";
 
 import { toast } from "sonner";
-import PrimaryActionButton from "../shared/buttons/PrimaryActionButton";
+
 import { useDeleteProductMutation } from "@/redux/features/product/productApi";
-import { useAppDispatch } from "@/hooks/useApp";
+import { useAppDispatch, useAuthSelector } from "@/hooks/useApp";
 import { storeProduct } from "@/redux/features/product/productSlice";
 import { useState } from "react";
 import { ConfirmationDialogue } from "@/pages/admin/ConfirmationDialogue";
@@ -39,6 +39,7 @@ export function ProductCard({
   const { addProdctToCart } = useAddToCart();
   const [deleteProduct, { isLoading }] = useDeleteProductMutation();
   const dispatch = useAppDispatch();
+  const { user } = useAuthSelector();
 
   // State for confirmation dialog
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -53,6 +54,15 @@ export function ProductCard({
     if (res.status) toast(`${product.name} deleted successfully`);
     fetchData();
     setIsDeleteDialogOpen(false); // Close the dialog after deletion
+  };
+
+  //handle add button
+  const handleAddToCard = (id: string) => {
+    if (!user) return navigate("/login");
+    if (user?.role === "Admin")
+      return toast("Only user is allowed to purchase");
+
+    addProdctToCart(id);
   };
 
   return (
@@ -85,7 +95,7 @@ export function ProductCard({
           </CreateProductDialogue>
         ) : (
           <Button
-            onClick={() => addProdctToCart(product._id)}
+            onClick={() => handleAddToCard(product._id)}
             variant="outline"
             className="flex-1"
           >

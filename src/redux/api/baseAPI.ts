@@ -10,6 +10,14 @@ import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
 
+interface ErrorResponse {
+  message?: string;
+  status?: number;
+  data?: {
+    message: string;
+  };
+}
+
 const base_url = import.meta.env.VITE_BASE_URL;
 
 const baseQuery = fetchBaseQuery({
@@ -30,10 +38,14 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   FetchArgs,
   BaseQueryApi,
   DefinitionType
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
 
-  if (result?.error) toast.error(result?.error?.data?.message as string);
+  if (result?.error) {
+    const error = result.error as ErrorResponse;
+    toast.error(error.data?.message || "An error occurred");
+  }
 
   if (result?.error?.status === 401) {
     //* Send Refresh

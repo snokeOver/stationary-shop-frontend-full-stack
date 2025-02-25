@@ -30,9 +30,9 @@ export function RegisterForm() {
   const form = useForm({
     resolver: zodResolver(registerUserSchema),
     defaultValues: {
-      name: "user2",
-      email: "user2@gamil.com",
-      password: "123456",
+      name: "",
+      email: "",
+      password: "",
     },
     mode: "onChange",
   });
@@ -68,7 +68,7 @@ export function RegisterForm() {
   };
 
   return (
-    <div className="flex max-w-sm flex-col items-center gap-10 rounded-xl bg-white/20 px-5 py-8 backdrop-blur-md md:max-w-md lg:max-w-xl lg:px-15 lg:py-20 xl:max-w-2xl">
+    <div className="flex max-w-sm flex-col items-center gap-5 rounded-xl bg-white/20 px-5 py-5 backdrop-blur-md md:max-w-md lg:max-w-xl lg:px-15  xl:max-w-2xl">
       <h1 className="text-lg font-bold uppercase text-black lg:text-4.2xl">
         Sign Up
       </h1>

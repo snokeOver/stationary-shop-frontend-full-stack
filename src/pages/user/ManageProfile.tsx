@@ -26,6 +26,7 @@ import {
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import LoadingSection from "@/components/global/LoadingSection";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -83,7 +84,12 @@ const ManageProfile = () => {
     }
   };
 
-  if (isLoading) return <div className="text-center py-10">Loading...</div>;
+  if (isLoading)
+    return (
+      <>
+        <LoadingSection />
+      </>
+    );
   if (isError)
     return (
       <div className="text-center py-10 text-red-500">

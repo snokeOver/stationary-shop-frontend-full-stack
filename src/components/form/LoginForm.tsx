@@ -37,8 +37,8 @@ export function LogInForm() {
   const form = useForm({
     resolver: zodResolver(loginUserSchema),
     defaultValues: {
-      email: "user1@gamil.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
     mode: "onChange",
   });
@@ -95,7 +95,7 @@ export function LogInForm() {
   };
 
   return (
-    <div className="flex max-w-sm flex-col items-center gap-10 rounded-xl bg-white/20 px-5 py-8 backdrop-blur-md md:max-w-md lg:max-w-xl lg:px-15 lg:py-20 xl:max-w-2xl">
+    <div className="flex max-w-sm flex-col items-center gap-10 rounded-xl bg-white/20 px-5 py-8 backdrop-blur-md md:max-w-md lg:max-w-xl lg:px-15  xl:max-w-2xl">
       <h1 className="text-lg font-bold uppercase text-black lg:text-4.2xl">
         Sign In
       </h1>

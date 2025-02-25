@@ -15,9 +15,7 @@ const Login = () => {
 
         {/* Login Form */}
         <div className="relative z-20 flex h-screen items-center justify-center">
-          <div className="bg-white/20 backdrop-blur-lg p-8 rounded-lg shadow-lg">
-            <LogInForm />
-          </div>
+          <LogInForm />
         </div>
       </div>
     </div>

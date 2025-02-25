@@ -7,6 +7,8 @@ import { ArrowLeft, ShoppingCart } from "lucide-react";
 
 import useAddToCart from "@/hooks/useAddToCart";
 import PrimaryActionButton from "@/components/shared/buttons/PrimaryActionButton";
+import { toast } from "sonner";
+import { useAuthSelector } from "@/hooks/useApp";
 
 const ProductDetails = () => {
   const location = useLocation();
@@ -15,6 +17,7 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const { data, error, isLoading } = useGetProductByIdQuery(slug);
   const { addProdctToCart, isLoading: isPending } = useAddToCart();
+  const { user } = useAuthSelector();
 
   if (isLoading) return <LoadingSection />;
   if (error) return <div>Error loading product details</div>;
@@ -31,6 +34,16 @@ const ProductDetails = () => {
     quantity,
     inStock,
   } = data.data;
+
+  //handle add to cart
+
+  const handleAddToCard = (id: string) => {
+    if (!user) return navigate("/login");
+    if (user?.role === "Admin")
+      return toast("Only user is allowed to purchase");
+
+    addProdctToCart(id);
+  };
 
   return (
     <div className="max-w-7xl mx-auto p-3 md:p-6   text-gray-900 dark:text-gray-100 min-h-screen">
@@ -100,7 +113,7 @@ const ProductDetails = () => {
                 btnText="Add To Cart"
                 loadingText="Adding..."
                 isLoading={isPending}
-                onClick={() => addProdctToCart(_id)}
+                onClick={() => handleAddToCard(_id)}
                 Icon={ShoppingCart}
               />
             </CardFooter>
