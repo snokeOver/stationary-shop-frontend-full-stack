@@ -168,8 +168,9 @@ snoke-stationery-frontend/
 
    Copy
 
-   VITE_API_BASE_URL=http://localhost:3500 # Backend API base URL
-   VITE_STRIPE_PUBLIC_KEY=your_stripe_public_key # Stripe public key for payment processing
+   VITE_BASE_URL=http://localhost:3500
+   VITE_STRIPE_PK=your_stripe_public_key
+   VITE_IMAGE_UPLOAD_API=your_api_key_for_imagebb
 
 4. **Start the application**:
 
